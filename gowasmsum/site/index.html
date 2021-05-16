@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go + WebAssembly</title>
+    <script src="wasm_exec.js"></script>
+    <style>
+        #text-submit{
+            margin: 10px;
+        }
+        #text-input{
+            padding:2px;
+            margin: 10px;
+            border-radius:2px;
+        }
+        #result-container{
+            margin:10px;
+            padding:20px;
+            background-color:linen;
+        }
+        #result-container #result #sum1,#sum2,#sum3{
+            margin: 10px;
+            font-family:'Times New Roman', Times, serif;
+            width: fit-content;
+            font-weight:800;
+        }
+    </style>
+</head>
+<body>
+    Enter Array Items (that can fit in uint8, e.g <i>1,10,100</i>): <input type="input" id="text-input">
+    <input type="submit" id="text-submit">
+    <div id="result-container">
+        <div id="result">
+            Sum1 (considering uint8arr and copy): <label id="sum1"></label><br/>
+            Sum2 (considering stringarr and copy): <label id="sum2"></label><br/>
+            Sum3 (considering uint8arr and zero-copy): <label id="sum3"></label>
+        </div>
+    </div>
+
+    <script>
+
+        let wasm_instance
+
+        (async function loadAndRunGoWasm() {
+            const go = new Go();
+            const result = await WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject);
+            wasm_instance = result.instance
+            go.run(wasm_instance)
+			console.log("Go WebAssembly Initialized")
+        })(wasm_instance)
+
+        let submit = document.querySelector('#text-submit');
+        submit.addEventListener('click', () => {
+
+            var array = document.querySelector('#text-input')
+            if (array != "" && array.value != ""){
+
+                var numbers = array.value.split(",").map(Number)
+                var numbers_string = array.value.split(",").map(String)
+
+                const sum1 = sum(numbers)
+                document.getElementById('sum1').innerHTML = sum1
+
+                const sum2 = sumstring(numbers_string)
+                document.getElementById('sum2').innerHTML = sum2
+
+                var ptr = fillmem(numbers.length, numbers)
+                const sum3 = sum_zerocopy(ptr, numbers.length)
+                document.getElementById('sum3').innerHTML = sum3
+            }
+        })
+
+        function sum(numbers){
+            
+            numbers_uint8arr = Uint8Array.from(numbers)
+            const sum = sumOf(numbers_uint8arr)
+            return sum
+        }
+
+        function sumstring(numbers_string){
+            
+            const sum = sumStringOf(numbers_string)
+            return sum
+        }
+
+        function fillmem(len, numbers){
+
+            var ptrObj = initializeWasmMemory(len)
+            var ptr = ptrObj.internalptr // extracting unsafe.Pointer
+            var mem = new Uint8Array(wasm_instance.exports.mem.buffer, ptr, len)
+            mem.set(new Uint8Array(numbers))
+
+            return ptr
+        }
+
+        function sum_zerocopy(ptr, len){
+
+            const sum = sumOf_ZeroCopy(ptr,len)
+            return sum
+        }
+
+    </script>
+</body>
+</html>

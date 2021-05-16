@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go + WebAssembly</title>
+    <script src="wasm_exec.js"></script>
+    <style>
+        #text-submit{
+            margin: 10px;
+        }
+        #text-input{
+            padding:2px;
+            margin: 10px;
+            border-radius:2px;
+        }
+        #result-container{
+            margin:10px;
+            padding:20px;
+            background-color:linen;
+        }
+        #result-container #result #answer{
+            margin: 10px;
+            font-family:'Times New Roman', Times, serif;
+            width: fit-content;
+            font-weight:800;
+        }
+    </style>
+</head>
+<body>
+    
+    Enter Expression (e.g. <i>2-4+23 < 232</i> or <i>9+1 == 8+2</i>): <input type="input" id="text-input">
+    <input type="submit" id="text-submit">
+    <div id="result-container"><div id="result">Answer: <label id="answer"></label></div></div>
+
+    <script>
+        let wasm_instance
+
+        (async function loadAndRunGoWasm() {
+            const go = new Go();
+            const result = await WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject);
+            wasm_instance = result.instance
+            go.run(wasm_instance)
+            console.log("Go WebAssembly Initialized")
+        })(wasm_instance)
+
+        let submit = document.querySelector('#text-submit');
+        submit.addEventListener('click', () =>{
+
+            var expression = document.querySelector('#text-input')
+            if (expression != "" && expression.value != ""){
+                const response = send_for_evaluation(expression.value)
+                response.then(ans => {
+                    document.getElementById('answer').innerHTML = ans
+                })
+            }
+        })
+
+        function send_for_evaluation(expr){
+            return new Promise((resolve, reject) => {
+                resolve(evaluate(expr))
+            })
+        }
+
+    </script>
+</body>
+</html>
