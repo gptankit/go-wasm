@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go + WebAssembly</title>
+    <script src="wasm_exec.js"></script>
+    <style>
+        #text-submit{
+            margin: 10px;
+        }
+        #text-input{
+            padding:2px;
+            margin: 10px;
+            border-radius:2px;
+        }
+        #result-container{
+            margin:10px;
+            padding:20px;
+            background-color:linen;
+        }
+        #result-container #result #output{
+            margin: 10px;
+            font-family:'Times New Roman', Times, serif;
+            width: fit-content;
+            font-weight:800;
+        }
+    </style>
+</head>
+<body>
+    
+    Enter URL (e.g. <i>http://localhost:9191/fetchme</i> or <i>https://www.reddit.com</i>): <input type="input" id="text-input">
+    <input type="submit" id="text-submit">
+    <div id="result-container"><div id="result">Result: <label id="output"></label></div></div>
+
+    <script>
+        let wasm_instance
+
+        (async function loadAndRunGoWasm() {
+            const go = new Go();
+            const result = await WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject);
+            wasm_instance = result.instance
+            go.run(wasm_instance)
+            console.log("Go WebAssembly Initialized")
+        })(wasm_instance)
+
+        let submit = document.querySelector('#text-submit');
+        submit.addEventListener('click', () =>{
+
+            var url = document.querySelector('#text-input')
+            if (url != "" && url.value != ""){
+                const response = send_for_fetching(url.value)
+                response.then(
+                    data => {
+                        // data.json() is a promise of completion of http stream
+                        data.json().then(val => {
+                            document.getElementById('output').innerHTML = val.TestServer
+                        })  
+                    },
+                    error => {
+                        document.getElementById('output').innerHTML = error
+                    }
+                )
+            }
+        })
+
+        function send_for_fetching(url){
+            // this will get and return a promise of a response
+            return fetchme(url)
+        }
+
+    </script>
+</body>
+</html>

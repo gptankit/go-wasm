@@ -7,20 +7,20 @@ import (
 )
 
 type GenericEvaluator interface {
-	EvaluateFn(string) (interface{}, error)
+	Bind() js.Func
 }
 
 type NormalEvaluator struct {
 	EvaluateFn func(string) (interface{}, error)
 }
 
-func InitAndBindEvaluator() js.Func {
+func NewEvaluator() GenericEvaluator {
 
 	evaluator := &NormalEvaluator{
 		EvaluateFn: govaluate.InitGovaluate(),
 	}
 
-	return evaluator.Bind()
+	return evaluator
 }
 
 func (e *NormalEvaluator) Bind() js.Func {

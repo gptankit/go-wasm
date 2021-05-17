@@ -23,4 +23,4 @@ func (e *NormalEvaluator) Bind() js.Func {
 b) While exporting functions through `js.Global().Set(<func_name>, <func_def>)` method, there can be a mistake in assigning same function name for more than one function definitions. There is no compile or runtime error thrown in such a case rather the wasm module simply exports the last bound function definition in order. To avoid this, suggest to use Go `map` to first set up <_func_name_, _func_def_> key value pairs, so the mistake is caught during compilation time as `duplicate key in map literal`.
 
 
-To run, cd to _gowasmeval/site_ and then *go run server.go*
+To run, cd to _gowasmeval/site_ and then *./start.sh*

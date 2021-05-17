@@ -64,4 +64,4 @@ sliceHeader := &reflect.SliceHeader{
 var ptr = (*[]uint8)(unsafe.Pointer(sliceHeader))
 ```
 
-To run, cd to _gowasmsum/site_ and then *go run server.go*
+To run, cd to _gowasmsum/site_ and then *./start.sh*

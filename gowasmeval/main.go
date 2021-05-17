@@ -21,7 +21,7 @@ func main() {
 func getWasmExportables() map[string]js.Func {
 
 	return map[string]js.Func{
-		"evaluate": evaluator.InitAndBindEvaluator(),
+		"evaluate": evaluator.NewEvaluator().Bind(),
 		// add more funcs here
 	}
 }
