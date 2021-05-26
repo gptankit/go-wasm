@@ -13,7 +13,7 @@ type NormalFetcher struct {
 	FetcherFn func(string, js.Value, js.Value)
 }
 
-// NewFetcher returns fether object
+// NewFetcher returns the fetcher object
 func NewFetcher() GenericFetcher {
 
 	fetcher := &NormalFetcher{
@@ -23,7 +23,7 @@ func NewFetcher() GenericFetcher {
 	return fetcher
 }
 
-// Bind returns a JS promise wrapper that can be set on JS window
+// Bind returns a js promise wrapper that can be set on js window object
 func (f *NormalFetcher) Bind() js.Func {
 
 	return js.FuncOf(func(this js.Value, args []js.Value) interface{} {
@@ -34,8 +34,8 @@ func (f *NormalFetcher) Bind() js.Func {
 	})
 }
 
-// newJSPromise returns a new JS promise
-func newJSPromise(f *NormalFetcher, url string) js.Value {
+// newJSPromise returns a new js promise
+func newJSPromise(f *NormalFetcher, url string) interface{} {
 
 	promiseFunc := js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 
@@ -47,7 +47,7 @@ func newJSPromise(f *NormalFetcher, url string) js.Value {
 		return nil
 	})
 
-	// return Promise object
+	// return 'Promise' object
 	jsPromise := js.Global().Get("Promise")
 	return jsPromise.New(promiseFunc)
 }

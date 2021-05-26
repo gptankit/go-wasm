@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// InitHttpReq sets up a JS func that can fetch from a url and accordingly call resolve/reject callbacks
+// InitHttpReq sets up a js func that can fetch from a url and accordingly call resolve/reject callbacks
 func InitHttpReq() func(string, js.Value, js.Value) {
 
 	return func(url string, resolve js.Value, reject js.Value) {
@@ -37,21 +37,23 @@ func InitHttpReq() func(string, js.Value, js.Value) {
 	}
 }
 
-// newJSError returns a new JS error object
+// newJSError returns a new js error object
 func newJSError(err error) interface{} {
 
+	// setting error to the error object
 	jsError := js.Global().Get("Error")
 	return jsError.New(err.Error())
 }
 
-// newJSResponse returns a new JS response object with response body set
+// newJSResponse returns a new js response object with response body set
 func newJSResponse(body []byte) interface{} {
 
-	// "data" is a byte slice, so we need to convert it to a JS Uint8Array object
+	// converting "data" to a js Uint8Array object
 	jsArray := js.Global().Get("Uint8Array")
 	jsBody := jsArray.New(len(body))
 	js.CopyBytesToJS(jsBody, body)
 
+	// setting js array to the response object
 	jsResponse := js.Global().Get("Response")
 	return jsResponse.New(jsBody)
 }

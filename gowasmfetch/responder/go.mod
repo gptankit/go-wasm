@@ -1,4 +1,4 @@
-module up
+module responder
 
 go 1.16
 

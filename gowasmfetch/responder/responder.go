@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -18,22 +17,17 @@ func main() {
 	flag.Parse()
 
 	log.Printf("listening on %q...", *listen)
+
 	smux := http.NewServeMux()
 	smux.HandleFunc("/fetchme", func(res http.ResponseWriter, req *http.Request) {
-		fmt.Println(req.Header)
-		fmt.Println(req.URL.Hostname)
-		fmt.Println(req.Host)
-		fmt.Println(req.Method)
-		fmt.Println(req.RequestURI)
 		res.Header().Set("Content-Type", "application/json")
-		res.Write([]byte(`{"TestServer": "OK!"}`))
+		res.Write([]byte(`{"Data": "OK!"}`))
 	})
 
 	// adding cors headers to the server responses
 	crs := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:8181"},
-		AllowedMethods:   []string{"GET", "POST"},
-		AllowCredentials: true,
+		AllowedOrigins: []string{"http://localhost:8181"},
+		AllowedMethods: []string{"GET", "POST"},
 	})
 
 	handler := crs.Handler(smux)

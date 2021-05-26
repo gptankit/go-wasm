@@ -14,6 +14,7 @@ type NormalEvaluator struct {
 	EvaluateFn func(string) (interface{}, error)
 }
 
+// NewEvaluator returns the evaluator object
 func NewEvaluator() GenericEvaluator {
 
 	evaluator := &NormalEvaluator{
@@ -23,6 +24,7 @@ func NewEvaluator() GenericEvaluator {
 	return evaluator
 }
 
+// Bind creates the wrapper go function exposed to js
 func (e *NormalEvaluator) Bind() js.Func {
 
 	return js.FuncOf(func(this js.Value, args []js.Value) interface{} {

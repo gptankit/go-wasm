@@ -18,6 +18,7 @@ func main() {
 	<-c
 }
 
+// getWasmExportables creates map of js func to go func
 func getWasmExportables() map[string]js.Func {
 
 	return map[string]js.Func{

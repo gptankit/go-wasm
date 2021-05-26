@@ -4,6 +4,7 @@ import (
 	govaluate "github.com/Knetic/govaluate"
 )
 
+// InitGovaluate returns function that can evaulate expression
 func InitGovaluate() func(string) (interface{}, error) {
 
 	return func(expression string) (interface{}, error) {

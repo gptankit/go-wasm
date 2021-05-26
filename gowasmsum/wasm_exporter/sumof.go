@@ -6,6 +6,7 @@ import (
 	"unsafe"
 )
 
+// SumOf returns sum of uint8 numbers
 func SumOf(this js.Value, args []js.Value) interface{} {
 
 	jsArray := args[0]
@@ -25,6 +26,7 @@ func SumOf(this js.Value, args []js.Value) interface{} {
 	return js.ValueOf(sum)
 }
 
+// SumStringOf returns concatenation of strings
 func SumStringOf(this js.Value, args []js.Value) interface{} {
 
 	jsArray := args[0]
@@ -47,6 +49,7 @@ func SumStringOf(this js.Value, args []js.Value) interface{} {
 
 // Below functions are used as a zero copy alternative to SumOf function
 
+// InitializeWasmMemory initializes wasm memory of passed length and returns a pointer
 func InitializeWasmMemory(this js.Value, args []js.Value) interface{} {
 
 	var ptr *[]uint8
@@ -62,6 +65,7 @@ func InitializeWasmMemory(this js.Value, args []js.Value) interface{} {
 	return js.ValueOf(boxedPtrMap)
 }
 
+// SumOf_ZeroCopy loads the array populated at the pointer and returns sum
 func SumOf_ZeroCopy(this js.Value, args []js.Value) interface{} {
 
 	var len = args[1].Int()
