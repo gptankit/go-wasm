@@ -120,3 +120,4 @@ As Go exports functions to the Javascript _window_ object, we can call wasm func
 
 - **gowasmsum** (example demonstrating use of memory copying techniques between wasm and Javascript): https://github.com/gptankit/go-wasm/tree/main/gowasmsum
 - **gowasmeval** (example demonstrating use of external Go packages and suggested code structure): https://github.com/gptankit/go-wasm/tree/main/gowasmeval
+- **gowasmfetch** (example demonstrating use of I/O techniques and working around same-origin policy): https://github.com/gptankit/go-wasm/tree/main/gowasmfetch
