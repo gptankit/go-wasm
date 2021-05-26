@@ -1,6 +1,7 @@
 package gofetch
 
 import (
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"syscall/js"
@@ -26,14 +27,14 @@ func InitHttpReq() func(string, js.Value, js.Value) {
 		if resErr != nil {
 			reject.Invoke(newJSError(resErr))
 			return
-		}
-
-		if res != nil && res.Body != nil && res.StatusCode == http.StatusOK {
+		} else if res != nil && res.Body != nil && res.StatusCode == http.StatusOK {
 			defer res.Body.Close()
 			body, _ := ioutil.ReadAll(res.Body)
 			resolve.Invoke(newJSResponse(body))
 			return
 		}
+
+		reject.Invoke(newJSError(errors.New("Something went wrong!")))
 	}
 }
 
