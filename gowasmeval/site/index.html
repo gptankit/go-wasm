@@ -53,21 +53,12 @@
 
             var expression = document.querySelector('#text-input')
             if (expression != "" && expression.value != ""){
-                console.log("before call")
-                //console.log(evaluate(expression.value))
-                const response = send_for_evaluation(expression.value)
-                response.then(ans => {
-                   document.getElementById('answer').innerHTML = ans
-                })
-                console.log("after call")
+                const ans = evaluate(expression.value)
+                document.getElementById('answer').innerHTML = ans
+            } else{
+                document.getElementById('answer').innerHTML = "Philosophically true!"
             }
         })
-
-        function send_for_evaluation(expr){
-            return new Promise((resolve, reject) => {
-                resolve(evaluate(expr))
-            })
-        }
 
     </script>
 </body>

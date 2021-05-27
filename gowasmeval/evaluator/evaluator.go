@@ -2,7 +2,6 @@ package evaluator
 
 import (
 	govaluate "gowasmeval/evaluator/govaluate"
-	"log"
 	"syscall/js"
 )
 
@@ -31,7 +30,7 @@ func (e *NormalEvaluator) Bind() js.Func {
 		expression := args[0].String()
 		result, err := e.EvaluateFn(expression)
 		if isErr(err) {
-			return false
+			return js.ValueOf(err.Error())
 		}
 		return js.ValueOf(result)
 	})
@@ -39,7 +38,7 @@ func (e *NormalEvaluator) Bind() js.Func {
 
 func isErr(err error) bool {
 	if err != nil {
-		log.Printf("error encountered: %s\n", err.Error())
+		//log.Printf("error encountered: %s\n", err.Error())
 		return true
 	}
 	return false
