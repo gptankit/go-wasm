@@ -34,12 +34,16 @@
     <div id="result-container"><div id="result">Result: <label id="output"></label></div></div>
 
     <script>
+        
         let wasm_instance
-
         (async function loadAndRunGoWasm() {
             const go = new Go();
-            const result = await WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject);
-            wasm_instance = result.instance
+            const wasm_module = fetch("main.wasm")
+            if (WebAssembly.instantiateStreaming){
+                wasm_instance = (await WebAssembly.instantiateStreaming(wasm_module, go.importObject)).instance;
+            } else{
+                wasm_instance = (await WebAssembly.instantiate(await ((await wasm_module).arrayBuffer()), go.importObject)).instance
+            }
             go.run(wasm_instance)
             console.log("Go WebAssembly Initialized")
         })(wasm_instance)
