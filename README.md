@@ -1,6 +1,6 @@
 # Understanding WebAssembly and interoperability with Go and Javascript
 
-_(This is a gentle introduction to the world of WebAssembly from the lens of Go and Javascript. The purpose of this primer is to introduce WebAssembly to people who are already familiar with Go and want to use their understanding to build fast programs for the web and other environments outside the world of Go)_
+_(This is a gentle introduction to the world of WebAssembly from the lens of Go and Javascript. The purpose of this primer is to introduce WebAssembly to people who are already familiar with Go and want to use their understanding to build fast programs for the web and other environments outside the world of Go. If you are already substantially familiar with WebAssembly, you may want to directly jump to the experiments - https://github.com/gptankit/go-wasm#experiments)_
 
 Traditionally Javascript has been the language of choice for doing any kind of logic on browsers. Because of its interpreted nature, it is usually slow in execution. Not to mention that writing complex logics in Javascript quickly becomes cumbersome and bloated. A new system was needed to allow for complex and faster code execution in the browser-land.
 
@@ -116,8 +116,8 @@ The _WebAssembly.instantiateStreaming_ call accepts two arguments - first, a _re
 
 As Go exports functions to the Javascript _window_ object, we can call wasm functions normally as we would do for any Javascript functions - by using the function name `fn_exported_name` set in Go exports and passing in the required parameters.
 
-## Working examples
+## Experiments
 
-- **gowasmsum** (example demonstrating use of memory copying techniques between wasm and Javascript): https://github.com/gptankit/go-wasm/tree/main/gowasmsum
-- **gowasmeval** (example demonstrating use of external Go packages and suggested code structure): https://github.com/gptankit/go-wasm/tree/main/gowasmeval
-- **gowasmfetch** (example demonstrating use of I/O techniques and working around same-origin policy): https://github.com/gptankit/go-wasm/tree/main/gowasmfetch
+- **gowasmsum** (experiment demonstrating use of memory copying techniques between wasm and Javascript): https://github.com/gptankit/go-wasm/tree/main/gowasmsum
+- **gowasmeval** (experiment demonstrating use of external Go packages and suggested code structure): https://github.com/gptankit/go-wasm/tree/main/gowasmeval
+- **gowasmfetch** (experiment demonstrating use of I/O techniques and working around same-origin policy): https://github.com/gptankit/go-wasm/tree/main/gowasmfetch
